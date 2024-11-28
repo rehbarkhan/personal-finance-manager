@@ -1,0 +1,26 @@
+{% extends 'app/base.html' %}
+{% block title %}Finance Report{% endblock %}
+
+{% block body %}
+
+
+<h1 class="text-center text-2xl text-blue-500 font-extrabold mt-10">Login</h1>
+<form method="POST">
+    <div class="flex flex-col justify-center items-center mt-3 w-screen max-w-md mx-auto">
+    {% csrf_token %}
+    <div class="w-full mb-3">
+        <label for="email_id" class="block text-md" >
+            Email <input type="email" name="email" id="email_id" placeholder="john@doe.com" class="w-full max-w-md px-5 py-2 border border-blue-400 ring-none focus:outline-none">
+        </label>
+    </div>
+
+    <div class="w-full mb-3">
+        <label for="password_id" class="block text-md" >
+            Password <input type="password" name="password" id="password_id" placeholder="Enter your password" class="w-full max-w-md px-5 py-2 border border-blue-400 ring-none focus:outline-none">
+        </label>
+    </div>
+
+    <button type="submit" class="px-5 py-2 bg-green-50 text-green-500 hover:bg-green-200 w-full">Login</button>
+</div>
+</form>
+{% endblock %}

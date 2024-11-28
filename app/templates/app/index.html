@@ -1,0 +1,33 @@
+{% extends 'app/base.html' %}
+{% block title %}Finance Report{% endblock %}
+
+{% block body %}
+<h1 class="mt-20 mb-3 text-center text-xl text-blue-300">Yearly Expense Projectection for Year - {{year}}</h1>
+<div class="flex justify-center items-center">
+  <div class="w-full max-w-2xl h-full">
+    <canvas id="myChart"></canvas>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July','Aug','Sept','Oct','Nov','Dec'],
+        datasets: [{
+          label: 'Saving for {{year}}',
+          data: ['{{jan}}','{{feb}}','{{mar}}','{{apr}}','{{may}}','{{june}}','{{july}}','{{aug}}','{{spet}}','{{oct}}','{{nov}}','{{dec}}'],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+{% endblock %}

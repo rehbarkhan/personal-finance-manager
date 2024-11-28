@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <title>{% block title %} {% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        *{
+            font-family: "Inter", Arial, Helvetica, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <nav class="w-full h-20 flex items-center justify-between px-5 border-b">
+        <div class="text-2xl">Expense <space class="text-blue-500">Manager</space></div>
+        <ul class="flex items-center space-x-1">
+            
+            {% if not request.user.is_authenticated %}
+            {% url 'register' as register_url %}
+            <li><a href="{% url 'register' %}" class="px-5 py-2 hover:bg-blue-100 {% if request.path == register_url %} bg-blue-300 {% endif %}">Register</a></li>
+
+            {% url 'login' as login_url %}
+            <li><a href="{% url 'login' %}" class="px-5 py-2 hover:bg-blue-100 {% if request.path == login_url %} bg-blue-300 {% endif %}">Login</a></li>
+            {% else %}
+            <li>{% url 'index' as index_url %}
+                <a href="{% url 'index' %}" class="px-5 py-2 hover:bg-blue-100 {% if request.path == index_url %}bg-blue-300{% endif %}">Home</a></li>            
+            <li>{% url 'add_expense' as add_expense_url %}
+                <a href="{% url 'add_expense' %}" class="px-5 py-2 hover:bg-blue-100 {% if request.path == add_expense_url %} bg-blue-300{% endif %}">Add Expense</a></li>
+            <li>
+                <a href="{% url 'logout' %}" class="text-red-500 px-5 py-2  hover:bg-red-100">Logout</a></li>
+            </li>
+            {% endif %}
+            
+            </div>
+        </ul>
+    </nav>
+
+    {% if messages %}
+    {% for message in messages %}
+            <div class="w-full max-w-md bg-blue-50 mx-auto border-l-4 border-blue-500 h-10 mt-5 flex items-center justify-center text-blue-600">
+                {{message}}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% block body %}
+
+    {% endblock %}
+</body>
+</html>

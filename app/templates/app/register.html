@@ -1,0 +1,28 @@
+{% extends 'app/base.html' %}
+{% block title %}Finance Report{% endblock %}
+
+{% block body %}
+<h1>Register</h1>
+
+{% if success %}
+<h1 class="text-center text-xl text-green-400">
+    User Registerd successfully with below credentail</h1>
+Username : {{email}}
+Password : {{password}}
+{% else %}
+<form method="POST">
+    <div class="flex flex-col justify-center items-center mt-3 w-screen max-w-md mx-auto">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="w-full mb-3">
+                    <label class="block text-md" for="{{field.id_for_label}}">{{field.label}}</label>
+                    {{field}}
+            </div>
+        {% endfor %}
+        <button type="submit" class="px-5 py-2 bg-blue-500 hover:bg-blue-600 text-white w-full">Register</button>
+
+    </div>
+    
+</form>
+{% endif %}
+{% endblock %}
