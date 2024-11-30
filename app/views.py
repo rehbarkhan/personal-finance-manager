@@ -120,8 +120,16 @@ class Profile(LoginRequiredMixin, View):
             current_password = request.POST.get('current_password')
             new_password_first = request.POST.get('new_password_first')
             new_password_second = request.POST.get('new_password_second')
-
-            # do some validateion
+        
+            # validation
+            if new_password_first != new_password_second:
+                messages.error(request, "Your new password doesn't match")
+                return render(request, 'app/partial/profile.html')
+            auth_user = authenticate(username=request.user.username, password=current_password)
+            if auth_user is None:
+                messages.error(request, "Your current password is incorrect")
+                return render(request, 'app/partial/profile.html')
+            
             User = request.user
             User.set_password(new_password_first)
             User.save()
