@@ -1,0 +1,38 @@
+<div id="report_table" class="container mx-auto">
+    {% load humanize %}
+    {% if reports %}
+        <table class="w-full">
+            <thead>
+                <tr class="border-b border-gray-300 bg-blue-50 font-bold py-10 text-blue-500">
+                    <th>Bill Date</th>
+                    <th>Context</th>
+                    <th>Credit</th>
+                    <th>Debit</th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for d in reports %}
+                    <tr class="border-b border-gray-300 hover:bg-gray-100 font-bold py-10">
+                        <td>{{d.date}}</td>
+                        <td>{{d.name}}</td>
+                        {% if d.transaction_type == 'debit' %}
+                        <td></td>
+                        <td>&#8377; {{d.sum | intcomma }}</td>
+                        {% else %}
+                        <td> &#8377;{{d.sum | intcomma }}</td>
+                        <td></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                <tr class="border-b border-gray-300 bg-gray-100 font-bold py-10">
+                    <td colspan="2">Total</td>
+                    <td> &#8377; {{debit_total | intcomma }}</td>
+                    <td> &#8377; {{credit_total | intcomma }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% else %}
+    <h1 class="text-blue-500">No finance record found.</h1>
+    {% endif %}
+    <div class="my-10"></div>
+</div>

@@ -1,0 +1,30 @@
+{% extends 'app/base.html' %}
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+<div class="container mx-auto">
+    <h1 class="text-2xl font-extralight text-gray-600 mt-10 mb-5">Change your password</h1>
+    <form hx-post="{% url 'profile' %}" hx-trigger="submit" hx-swap="outerHTML">
+        <div>
+            <label for="current_password_id" class="block mb-3">
+                Current Password <input type="password" name="current_password" id="current_password_id" class="block w-full max-w-md px-5 py-2 border border-blue-400 ring-none focus:outline-none">
+            </label>
+            <label for="new_password_first_id" class="block mb-3">
+                New Password <input type="password" name="new_password_first" id="new_password_first_id" class="block w-full max-w-md px-5 py-2 border border-blue-400 ring-none focus:outline-none">
+            </label>
+            <label for="new_password_second_id" class="block mb-3">
+                Verify New Password <input type="password" name="new_password_second" id="new_password_second_id" class="block w-full max-w-md px-5 py-2 border border-blue-400 ring-none focus:outline-none">
+            </label>
+            <button type="submit" class="w-full max-w-md text-green-600 bg-green-50 hover:bg-green-100 px-5 py-2">Change Password</button>
+        </div>
+    </form>
+
+    <div id="msg" hx-swap-oob="true">
+        {% if messages %}
+            {% for message in messages %}
+                {{message}}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

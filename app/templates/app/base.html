@@ -8,13 +8,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <title>{% block title %} {% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.3"></script>
     <style>
         *{
             font-family: "Inter", Arial, Helvetica, sans-serif;
         }
+        .htmx-indicator{
+        opacity:0;
+        /* transition: opacity 500ms ease-in; */
+        }
+        .htmx-request .htmx-indicator{
+            opacity:1;
+        }
+        .htmx-request.htmx-indicator{
+            opacity:1;
+        }
+         thead th {
+            margin-top: 0px;
+            position: sticky;
+            top: 0; /* Fix the header to the top */
+            background-color: #f9f9f9; /* Add a background color */
+            z-index: 1; /* Ensure the header is above the table body */
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-left: 1px solid black;
+            border-right: 1px solid black;
+        }
+        tbody td{
+            text-align: center;
+            border-left: 1px solid black;
+            border-right: 1px solid black;
+        }
     </style>
 </head>
-<body>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <nav class="w-full h-20 flex items-center justify-between px-5 border-b">
         <div class="text-2xl">Expense <space class="text-blue-500">Manager</space></div>
         <ul class="flex items-center space-x-1">
@@ -30,6 +57,14 @@
                 <a href="{% url 'index' %}" class="px-5 py-2 hover:bg-blue-100 {% if request.path == index_url %}bg-blue-300{% endif %}">Home</a></li>            
             <li>{% url 'add_expense' as add_expense_url %}
                 <a href="{% url 'add_expense' %}" class="px-5 py-2 hover:bg-blue-100 {% if request.path == add_expense_url %} bg-blue-300{% endif %}">Add Expense</a></li>
+            <li>
+                {% url 'report_expense' as report_expense_url %}
+                <a href="{% url 'report_expense' %}" class="px-5 py-2 hover:bg-blue-100 {% if request.path == report_expense_url %} bg-blue-300{% endif %}">Expense Report</a></li>
+            </li>
+            <li>
+                {% url 'profile' as profile_url %}
+                <a href="{% url 'profile' %}" class="px-5 py-2 hover:bg-blue-100 {% if request.path == profile_url %} bg-blue-300{% endif %}">Profile</a></li>
+            </li>
             <li>
                 <a href="{% url 'logout' %}" class="text-red-500 px-5 py-2  hover:bg-red-100">Logout</a></li>
             </li>

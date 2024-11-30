@@ -33,6 +33,15 @@ class Profile(ModelBase):
 
     def __str__(self):
         return 'Profile - {}'.format(self.email)
+class ExpenseYear(ModelBase):
+    year = models.CharField(max_length=120)
+    User = models.ForeignKey(User, related_name='ExpenseYear', on_delete=models.CASCADE,editable=False)
+
+    def __str__(self):
+        return str(self.year)
+    
+    class Meta:
+        ordering = ['-year']
 
 class Expense(ModelBase):
     _type = (
@@ -48,3 +57,13 @@ class Expense(ModelBase):
 
     def __str__(self):
         return '{} -> {}'.format(self.User.email, self.name)
+    
+    def save(self, *args, **kwargs):
+        try:
+            ExpenseYear.objects.get_or_create(year = str(self.date.year), User = self.User)
+        except:
+            pass
+        return super(Expense, self).save(*args, **kwargs)
+    
+    class Meta:
+        ordering =['date']

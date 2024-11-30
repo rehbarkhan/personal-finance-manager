@@ -1,1 +1,5 @@
 django==4.2.*
+django-seed
+mysqlclient
+psycopg2-binary
+django-htmx

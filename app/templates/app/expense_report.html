@@ -1,0 +1,40 @@
+{% extends 'app/base.html' %}
+{% block title %}Finance Report{% endblock %}
+
+{% block body %}
+<div class="flex justify-center items-center w-full mt-4">
+    <form hx-post="{% url 'report_expense' %}" hx-swap="outerHTML" hx-trigger="submit" hx-target="#report_table" hx-indicator="#loading-indicator">
+        <label for="year_id">
+            Year
+            <select name="year" id="year_id">
+                {% for year in years %}
+                    <option value="{{year}}">{{year}}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label for="month_id" class="ml-5">
+            Month
+            <select name="month" id="month_id">
+                <option value="1">Jan</option>
+                <option value="2">Feb</option>
+                <option value="3">Mar</option>
+                <option value="4">Apr</option>
+                <option value="5">May</option>
+                <option value="6">Jun</option>
+                <option value="7">July</option>
+                <option value="8">Aug</option>
+                <option value="9">Setp</option>
+                <option value="10">Oct</option>
+                <option value="11">Nov</option>
+                <option value="12">Dec</option>
+            </select>
+        </label>
+        <button class="w-full max-w-sm block my-5 px-5 py-2 bg-blue-50 text-blue-500 hover:bg-blue-100" type="submit">Fetch Finance Report</button>
+    </form>
+</div>
+<div id="loading-indicator" class="htmx-indicator text-center text-blue-500 text-xl">Fetching Report...</div>
+
+<div id="report_table" class="container mx-auto">
+    
+</div>
+{% endblock %}

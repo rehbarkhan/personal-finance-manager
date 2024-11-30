@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from .models import Expense
+from .models import Expense, ExpenseYear
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -8,6 +8,8 @@ from .forms import ProfileForm
 from django.contrib.auth.models import User
 from django.utils import timezone
 from .forms import ExpenseForm
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 
 class IndexView(LoginRequiredMixin, View):
     def get(self, request):
@@ -67,7 +69,6 @@ class RegisterView(View):
             })
         return render(request, 'app/register.html', {'form':form})
     
-
 class AddExpense(LoginRequiredMixin, View):
     def get(self, request):
         form = ExpenseForm()
@@ -87,3 +88,45 @@ class Logout(View):
         if request.user.is_authenticated:
             logout(request)
         return redirect('login')
+
+class ExpenseReport(LoginRequiredMixin, View):
+    def get(self, request):
+        years = ExpenseYear.objects.filter(User=request.user)
+        return render(request, 'app/expense_report.html', {'years':years})
+    
+    def post(self, request):
+        if request.htmx:
+            from time import sleep
+            year = request.POST.get('year')
+            month = request.POST.get('month')
+            reports = Expense.objects.filter(User=request.user,date__year = year, date__month=month)
+            credit_total = 0
+            debit_total = 0 
+            for report in reports:
+                if report.transaction_type == 'credit':
+                    credit_total += report.sum
+                else:
+                    debit_total += report.sum
+            return render(request, 'app/partial/expense_report.html',{'reports':reports, 'credit_total':credit_total, "debit_total":debit_total})
+        else:
+            return redirect('report_expense')
+
+class Profile(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'app/profile.html', {})
+    
+    def post(self, request):
+        if request.htmx:
+            current_password = request.POST.get('current_password')
+            new_password_first = request.POST.get('new_password_first')
+            new_password_second = request.POST.get('new_password_second')
+
+            # do some validateion
+            User = request.user
+            User.set_password(new_password_first)
+            User.save()
+            update_session_auth_hash(request=request, user=User)
+            messages.success(request, 'Your Password chagned succesfully.')
+            return render(request, 'app/partial/profile.html')
+        else:
+            return redirect('profile')

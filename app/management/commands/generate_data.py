@@ -6,12 +6,13 @@ from django.contrib.auth.models import User
 from datetime import date
 
 
+
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         seeder = Seed.seeder()
         if settings.DEBUG:
-            users = User.objects.filter(is_superuser=False)
-            start_date = date(2024,1,1)
+            users = User.objects.filter(is_superuser=True)
+            start_date = date(2000,1,1)
             end_date = date(2024,12,31)
             for user in users:
                 seeder.add_entity(
